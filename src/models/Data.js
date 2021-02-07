@@ -43,6 +43,9 @@ const DataSchema = mongoose.Schema({
   squareMeters: {
     type: Number,
   },
+  priceSquareMeter:{
+    type: Number
+  },
   rooms: {
     type: Number,
   },

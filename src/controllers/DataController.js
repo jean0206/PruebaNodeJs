@@ -1,6 +1,7 @@
 const csvParser = require("csv-parser");
 var fs = require("fs");
 const Data = require("../models/Data");
+const filter = require("../lib/CalculateDistance");
 
 const File = __dirname + "/file.csv";
 
@@ -17,10 +18,11 @@ const addRow = async (row) => {
     phone: row.Telefonos,
     type: row.Tipo,
     price: row.Precio,
+    priceSquareMeter: row["Precio por metro"],
     address: row.Direccion,
     province: row.Provincia,
     city: row.Ciudad,
-    squareMetes: row["Metros cuadrados"],
+    squareMeters: row["Metros cuadrados"],
     rooms: row.Habitaciones,
     bathrooms: row["Baños"],
     parking: row.Parking,
@@ -56,7 +58,6 @@ const addRow = async (row) => {
 };
 
 const uploadData = async (req, res) => {
-  const response = [];
   await Data.collection.drop().then(() => {
     console.log("Success");
   });
@@ -70,7 +71,6 @@ const uploadData = async (req, res) => {
       }
     })
     .on("end", () => {
-      console.log(response);
       res.status(200).json({ message: "data has been uploaded" });
     })
     .on("error", (error) => {
@@ -79,7 +79,6 @@ const uploadData = async (req, res) => {
 };
 
 const filterPriceRoom = async (req, res) => {
-
   if (parseFloat(req.params.priceMin) > parseFloat(req.params.priceMax)) {
     res.json({
       error: "The minimum price must not be higher than the maximum price",
@@ -99,6 +98,42 @@ const filterPriceRoom = async (req, res) => {
   }
 };
 
+const getAverage = async (req, res) => {
+  const latitude = req.params.latitude;
+  const length = req.params.length;
+  const distance = req.params.distance;
+  const allData = await Data.find();
+  console.log(allData.length)
+  let squareMeter = allData.map((data) => {
+    if (
+      filter.calculateDistance(
+        data.latitude,
+        data.length,
+        latitude,
+        length,
+        distance
+      )
+    ) {
+      return data.priceSquareMeter;
+    }
+  });
+  squareMeter = await squareMeter.filter((data) => data != undefined);
+  console.log(squareMeter)
+  if (squareMeter.length!=0) {
+    try {
+      const sum = squareMeter.reduce(
+        (previous, current) => (current += previous)
+      );
+      const total = sum / squareMeter.length;
+      res.status(200).json({
+        average: total,
+      });
+    } catch (error) {
+      res.status(401).json({ error: error.message });
+    }
+  } else {
+    res.json({ message: "no matches found" });
+  }
+};
 
-
-module.exports = { uploadData, filterPriceRoom };
+module.exports = { uploadData, filterPriceRoom, getAverage };

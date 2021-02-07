@@ -11,10 +11,12 @@ const dataRoute = require('./routes/DataRoutes')
 
 //Middlewares
 app.use(bodyParse.json())
+
+//Routes
 app.use('/data',dataRoute)
 
-app.get('/',()=>{
-  console.log("Hola")
+app.get('/',(req,res )=>{
+  res.send('Hola')
 })
 
 //DB CONNECT
