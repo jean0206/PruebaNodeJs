@@ -1,23 +1,27 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const bodyParse=require('body-parser')
-const getCsvv = require('./lib/uploadCsv')
+const bodyParse = require("body-parser");
 
 require("dotenv/config");
 
 //Import Routes
-const dataRoute = require('./routes/DataRoutes')
+const dataRoute = require("./routes/DataRoutes");
 
 //Middlewares
-app.use(bodyParse.json())
+app.use(bodyParse.json());
+const people = [
+  { name: "person 1" },
+  { name: "person 2" },
+  { name: "person 3" },
+];
 
 //Routes
-app.use('/data',dataRoute)
+app.use("/data", dataRoute);
 
-app.get('/',(req,res )=>{
-  res.send('Hola')
-})
+app.get("/", (req, res) => {
+  res.send("Server connect");
+});
 
 //DB CONNECT
 mongoose.connect(

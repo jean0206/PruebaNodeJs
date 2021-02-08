@@ -2,7 +2,7 @@ const csvParser = require("csv-parser");
 var fs = require("fs");
 const Data = require("../models/Data");
 const filter = require("../lib/CalculateDistance");
-
+const createFile = require("../lib/createFile");
 const File = __dirname + "/file.csv";
 
 //Add the row in the DB
@@ -98,12 +98,43 @@ const filterPriceRoom = async (req, res) => {
   }
 };
 
+const sendReport = async (req, res) => {
+  let latitudeSearch = req.params.latitude;
+  let lengthSearch = req.params.length;
+  let type = req.params.fileType;
+  try {
+    const dataSearch = await Data.find({
+      latitude: latitudeSearch,
+      length: lengthSearch,
+    });
+    const object = JSON.parse(JSON.stringify(dataSearch));
+
+    if (type === "pdf") {
+      const endRoute = createFile.createDocument(object, "pdf");
+      res.writeHead(200, {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": "attachment; filename=" + "report.pdf",
+      });
+      fs.createReadStream(endRoute).pipe(res);
+    } else if (type === "csv") {
+      const endRoute = createFile.createDocument(object, "csv");
+      console.log(endRoute);
+      res.writeHead(200, {
+        "Content-Type": "text/csv",
+        "Content-Disposition": "attachment; filename=" + "report.csv",
+      });
+      fs.createReadStream(endRoute).pipe(res);
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 const getAverage = async (req, res) => {
   const latitude = req.params.latitude;
   const length = req.params.length;
   const distance = req.params.distance;
   const allData = await Data.find();
-  console.log(allData.length)
   let squareMeter = allData.map((data) => {
     if (
       filter.calculateDistance(
@@ -118,8 +149,8 @@ const getAverage = async (req, res) => {
     }
   });
   squareMeter = await squareMeter.filter((data) => data != undefined);
-  console.log(squareMeter)
-  if (squareMeter.length!=0) {
+  console.log(squareMeter);
+  if (squareMeter.length != 0) {
     try {
       const sum = squareMeter.reduce(
         (previous, current) => (current += previous)
@@ -136,4 +167,4 @@ const getAverage = async (req, res) => {
   }
 };
 
-module.exports = { uploadData, filterPriceRoom, getAverage };
+module.exports = { uploadData, filterPriceRoom, getAverage, sendReport };
