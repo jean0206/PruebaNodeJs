@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParse = require("body-parser");
+const cors = require('cors')
 
 require("dotenv/config");
 
@@ -10,7 +11,7 @@ const dataRoute = require("./routes/DataRoutes");
 
 //Middlewares
 app.use(bodyParse.json());
-
+app.use(cors())
 
 //Routes
 app.use("/data", dataRoute);
