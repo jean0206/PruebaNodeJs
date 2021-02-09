@@ -78,6 +78,7 @@ _Tiene como respuesta un archivo que se descarga y se muestra automaticamente.
 
 
 
-* [Node Js](https://nodejs.org/es/docs/) - El framework web usado
+* [Node Js](https://nodejs.org/es/docs/) 
 * [npm](https://www.npmjs.com/) - Manejador de dependencias
-* [ROME](https://rometools.github.io/rome/) - Usado para generar RSS
+* [express](https://expressjs.com/) - El framework web usado
+* [super test](https://www.npmjs.com/package/supertest) - Libreria usada para realizar las pruebas
