@@ -80,11 +80,10 @@ const uploadData = async (req, res) => {
 
 const filterPriceRoom = async (req, res) => {
   if (parseFloat(req.params.priceMin) > parseFloat(req.params.priceMax)) {
-    res.json({
+    res.status(401).json({
       error: "The minimum price must not be higher than the maximum price",
     });
   } else {
-    console.log(typeof req.params.priceMin);
     const dataFinde = await Data.find({
       $and: [
         {
@@ -94,7 +93,7 @@ const filterPriceRoom = async (req, res) => {
         { price: { $lte: parseFloat(req.params.priceMax) } },
       ],
     });
-    res.json(dataFinde);
+    res.json(dataFinde).status(200);
   }
 };
 
@@ -163,7 +162,7 @@ const getAverage = async (req, res) => {
       res.status(401).json({ error: error.message });
     }
   } else {
-    res.json({ message: "no matches found" });
+    res.status(401).json({ message: "no matches found" });
   }
 };
 

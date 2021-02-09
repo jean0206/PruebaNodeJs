@@ -4,10 +4,9 @@ const PDF = require("pdfkit");
 const fastCsv = require("fast-csv");
 
 const createDocument = (data, type) => {
-  console.log(data);
+  
   if (type == "pdf") {
     try {
-      console.log(createPDF(data));
       return createPDF(data);
     } catch (error) {
       console.log(error.message);
@@ -30,7 +29,6 @@ const createPDF = (data) => {
   data.forEach((dataNew) => {
     const keys = Object.keys(dataNew);
     const values = Object.values(dataNew);
-    console.log(keys.length);
     for (let i = 0; i < keys.length; i++) {
       doc.text(keys[i] + ":" + values[i]);
     }

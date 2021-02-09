@@ -10,11 +10,7 @@ const dataRoute = require("./routes/DataRoutes");
 
 //Middlewares
 app.use(bodyParse.json());
-const people = [
-  { name: "person 1" },
-  { name: "person 2" },
-  { name: "person 3" },
-];
+
 
 //Routes
 app.use("/data", dataRoute);
@@ -39,3 +35,5 @@ app.set("port", process.env.PORT || 3000);
 app.listen(app.get("port"), () => {
   console.log("Server ON", app.get("port"));
 });
+
+module.exports=app

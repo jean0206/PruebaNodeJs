@@ -1,4 +1,3 @@
-console.log("Hola");
 
 const radiansConvert = (grade) => {
   return grade * (Math.PI / 180);
