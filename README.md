@@ -71,5 +71,13 @@ _:distance es el rango en kilometros por el cual se desea filtrar
 ```
     https://datafilterapp.herokuapp.com/data/report/:latitude/:longitud/:typeFile
 ```
-_ :Type File, los parametros aceptados para este dato, son csv y pdf
-_ Tiene como respuesta un archivo que se descarga y se muestra automaticamente.
+_:Type File, los parametros aceptados para este dato, son csv y pdf
+_Tiene como respuesta un archivo que se descarga y se muestra automaticamente.
+
+## Construido con 🛠️
+
+
+
+* [Node Js](https://nodejs.org/es/docs/) - El framework web usado
+* [npm](https://www.npmjs.com/) - Manejador de dependencias
+* [ROME](https://rometools.github.io/rome/) - Usado para generar RSS
